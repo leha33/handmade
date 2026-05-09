@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Самодельные вещи У-И · handmade маркет</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* 🌊 НЕЖНО-ГОЛУБАЯ ПАЛИТРА */
+    body {
+      background: #e3f2fd;
+      font-family: 'Inter', 'Segoe UI', Roboto, system-ui, sans-serif;
+      line-height: 1.5;
+      padding: 2rem 1rem;
+      color: #0a2540;
+    }
+
+    .header {
+      max-width: 1100px;
+      margin: 0 auto 2.5rem auto;
+      padding-bottom: 1.2rem;
+      border-bottom: 2px solid #b3d9f7;
+    }
+
+    .header h1 {
+      font-size: 2.6rem;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      color: #065a8c;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-shadow: 2px 2px 0 rgba(255,255,255,0.5);
+    }
+
+    .header h1 span {
+      background: #c5e3ff;
+      color: #065a8c;
+      font-size: 1rem;
+      padding: 0.2rem 0.9rem;
+      border-radius: 40px;
+      font-weight: 500;
+      border: 1px solid #9dc6f0;
+    }
+
+    .subhead {
+      color: #2a6b9c;
+      margin-top: 0.3rem;
+      font-size: 1.1rem;
+      font-weight: 400;
+    }
+
+    /* информационный блок */
+    .info-banner {
+      max-width: 1100px;
+      margin: 0 auto 2rem auto;
+      background: linear-gradient(135deg, #d4ebff 0%, #c0e0fa 100%);
+      padding: 1.5rem 2rem;
+      border-radius: 24px;
+      border-left: 6px solid #1673b1;
+      box-shadow: 0 6px 14px rgba(21, 94, 147, 0.08);
+    }
+
+    .info-banner p {
+      font-size: 1.25rem;
+      color: #05456b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .info-banner strong {
+      background: #1673b1;
+      color: white;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 500;
+      font-size: 1rem;
+    }
+
+    .categories {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .category-tag {
+      background: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 500;
+      color: #065a8c;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      border: 1px solid #9dc6f0;
+    }
+
+    /* лента объявлений */
+    .catalog {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 2.2rem;
+    }
+
+    .product-card {
+      display: flex;
+      flex-wrap: wrap;
+      background: #ffffff;
+      border-radius: 28px;
+      box-shadow: 0 12px 28px -8px rgba(21, 94, 147, 0.12);
+      border: 1px solid #cce3f5;
+      overflow: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 22px 36px -12px rgba(7, 85, 143, 0.18);
+      border-color: #9ec5eb;
+      transform: translateY(-2px);
+    }
+
+    /* 🖼️ БЛОК С ТРЕМЯ ФОТО — слайдер */
+    .product-images {
+      flex: 1 1 40%;
+      min-width: 280px;
+      background-color: #d9ebf9;
+      position: relative;
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 320px;
+    }
+
+    .slides {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      display: none;
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* кнопки навигации слайдера */
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.85);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      color: #065a8c;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: all 0.2s;
+      z-index: 10;
+      border: 1px solid #b3d9f7;
+      font-weight: bold;
+    }
+
+    .slider-btn:hover {
+      background: #ffffff;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+      color: #05456b;
+    }
+
+    .slider-btn.prev {
+      left: 12px;
+    }
+
+    .slider-btn.next {
+      right: 12px;
+    }
+
+    /* индикаторы (точки) */
+    .slider-dots {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid #1673b1;
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 0;
+    }
+
+    .dot.active {
+      background: #1673b1;
+      width: 24px;
+      border-radius: 12px;
+      border-color: #1673b1;
+    }
+
+    /* счётчик фото */
+    .photo-counter {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0.3rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      color: #065a8c;
+      font-weight: 500;
+      z-index: 10;
+      border: 1px solid #cce3f5;
+      backdrop-filter: blur(4px);
+    }
+
+    /* правая сторона — описание */
+    .product-info {
+      flex: 1 1 60%;
+      padding: 2rem 2.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #ffffff;
+    }
+
+    .brand {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #4f8bb9;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    .product-title {
+      font-size: 2rem;
+      font-weight: 550;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.5rem;
+      color: #05456b;
+      line-height: 1.2;
+    }
+
+    .price {
+      font-size: 1.7rem;
+      font-weight: 600;
+      color: #1f5e8e;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .price-note {
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: #5a8ab5;
+    }
+
+    .description {
+      font-size: 1rem;
+      color: #1e4f73;
+      margin-bottom: 1.5rem;
+      padding-right: 0.5rem;
+    }
+
+    .details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.8rem;
+      margin-bottom: 1.8rem;
+      font-size: 0.9rem;
+      color: #26648b;
+      background: #ebf5ff;
+      padding: 0.8rem 1.2rem;
+      border-radius: 20px;
+      border-left: 4px solid #7bb3da;
+    }
+
+    .detail-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* кнопка связи — Telegram */
+    .contact-seller {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: #0088cc;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.1rem;
+      padding: 0.9rem 2rem;
+      border-radius: 48px;
+      transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+      border: 1px solid #0099dd;
+      width: fit-content;
+      box-shadow: 0 6px 12px rgba(0, 136, 204, 0.25);
+      margin-top: 0.4rem;
+    }
+
+    .contact-seller:hover {
+      background: #0077b5;
+      border-color: #0088cc;
+      box-shadow: 0 12px 20px -8px rgba(0, 136, 204, 0.35);
+      transform: scale(1.01);
+    }
+
+    .contact-seller:active {
+      transform: scale(0.99);
+    }
+
+    .seller-meta {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      margin-top: 1.2rem;
+      color: #3a7199;
+      font-size: 0.9rem;
+    }
+
+    .rating {
+      color: #e6a020;
+      letter-spacing: 2px;
+    }
+
+    .size-tag {
+      background: #d0e6f7;
+      padding: 0.2rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #06537c;
+    }
+
+    .cta-footer {
+      max-width: 1100px;
+      margin: 3rem auto 0 auto;
+      text-align: center;
+      padding: 2rem;
+      background: #d4ebff;
+      border-radius: 40px;
+    }
+
+    .cta-footer p {
+      font-size: 1.3rem;
+      color: #05456b;
+    }
+
+    .cta-footer .big-button {
+      display: inline-block;
+      margin-top: 1.2rem;
+      background: #0088cc;
+      color: white;
+      padding: 1rem 3rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.2rem;
+      transition: background 0.2s;
+      border: 1px solid #0099dd;
+      box-shadow: 0 6px 12px rgba(0, 136, 204, 0.25);
+    }
+
+    .cta-footer .big-button:hover {
+      background: #0077b5;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 1rem 0.8rem; }
+      .header h1 { font-size: 2rem; }
+      .product-card { flex-direction: column; }
+      .product-images { min-width: auto; width: 100%; }
+      .slider-container { min-height: 280px; }
+      .product-info { padding: 1.8rem 1.5rem; }
+      .product-title { font-size: 1.8rem; }
+      .price { font-size: 1.5rem; }
+      .info-banner p { font-size: 1.1rem; }
+    }
+
+    .icon { font-size: 1.2em; opacity: 0.8; }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #2a6990;
+      font-size: 0.9rem;
+      padding-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧵 САМОДЕЛЬНЫЕ ВЕЩИ У-И <span>handmade</span></h1>
+  <div class="subhead">✽ уникальные работы · напишите мастеру в Telegram ✽</div>
+</div>
+
+<div class="info-banner">
+  <p>
+    <span>🎨</span> 
+    <span><strong>ВЫ ВЫБИРАЕТЕ ДИЗАЙН САМИ</strong></span>
+    <span>— просто напишите, какую вещь хотите преобразить</span>
+  </p>
+  <div class="categories">
+    <span class="category-tag">🧵 ВЫШИВКА</span>
+    <span class="category-tag">🎨 КАСТОМИЗАЦИЯ</span>
+    <span class="category-tag">✨ КОМБО (вышивка + роспись)</span>
+  </div>
+  <p style="margin-top: 1rem; font-size: 1rem; opacity: 0.85;">
+    📝 Вам остаётся лишь написать и рассказать, как именно нужно сделать одежду. 
+    Эскиз, фото-пример или просто описание — я всё учту.
+  </p>
+</div>
+
+<div class="catalog">
+  
+  <!-- 1️⃣ ВЫШИВКА НА ОДЕЖДЕ (слайдер из 3 фото) -->
+  <div class="product-card">
+    <div class="product-images">
+      <div class="slider-container" id="slider1">
+        <div class="slides">
+          <div class="slide active">
+            <img src="https://images.pexels.com/photos/3737929/pexels-photo-3737929.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Вышивка на джинсовой куртке 1">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/11832622/pexels-photo-11832622.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Вышивка на джинсовой куртке 2">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/5876509/pexels-photo-5876509.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Вышивка на толстовке">
+          </div>
+        </div>
+        <button class="slider-btn prev" onclick="changeSlide('slider1', -1)">❮</button>
+        <button class="slider-btn next" onclick="changeSlide('slider1', 1)">❯</button>
+        <div class="slider-dots" id="dots1">
+          <span class="dot active" onclick="goToSlide('slider1', 0)"></span>
+          <span class="dot" onclick="goToSlide('slider1', 1)"></span>
+          <span class="dot" onclick="goToSlide('slider1', 2)"></span>
+        </div>
+        <div class="photo-counter" id="counter1">1 / 3</div>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="brand">КАТЕГОРИЯ · ВЫШИВКА</div>
+      <h2 class="product-title">Авторская вышивка на одежде</h2>
+      <div class="price">от 2 500 ₽ <span class="price-note">· цена зависит от сложности</span></div>
+      <p class="description">
+        Ручная вышивка нитками DMC и Anchor. Вы можете выбрать любой рисунок: 
+        цветы, инициалы, абстракцию или персонажа. Присылайте референсы — 
+        я создам уникальную вышивку специально для вас.
+      </p>
+      <div class="details">
+        <span class="detail-item"><span class="icon">🧵</span> мулине / шерсть</span>
+        <span class="detail-item"><span class="icon">👕</span> деним, хлопок, трикотаж</span>
+        <span class="detail-item"><span class="icon">⏱️</span> срок 3–7 дней</span>
+      </div>
+      <a href="https://t.me/alifanTO" target="_blank" rel="noopener noreferrer" class="contact-seller">
+        ✉️ Написать и обсудить вышивку
+      </a>
+      <div class="seller-meta">
+        <span class="rating">★★★★★ 5.0 (47 отзывов)</span>
+        <span><span class="icon">🎨</span> любой дизайн на ваш выбор</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2️⃣ КАСТОМИЗАЦИЯ ОДЕЖДЫ (слайдер из 3 фото) -->
+  <div class="product-card">
+    <div class="product-images">
+      <div class="slider-container" id="slider2">
+        <div class="slides">
+          <div class="slide active">
+            <img src="https://images.pexels.com/photos/5693906/pexels-photo-5693906.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Кастомизация куртки 1">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/11832628/pexels-photo-11832628.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Кастомизация футболки">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/5876512/pexels-photo-5876512.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Кастомизация толстовки">
+          </div>
+        </div>
+        <button class="slider-btn prev" onclick="changeSlide('slider2', -1)">❮</button>
+        <button class="slider-btn next" onclick="changeSlide('slider2', 1)">❯</button>
+        <div class="slider-dots" id="dots2">
+          <span class="dot active" onclick="goToSlide('slider2', 0)"></span>
+          <span class="dot" onclick="goToSlide('slider2', 1)"></span>
+          <span class="dot" onclick="goToSlide('slider2', 2)"></span>
+        </div>
+        <div class="photo-counter" id="counter2">1 / 3</div>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="brand">КАТЕГОРИЯ · КАСТОМИЗАЦИЯ</div>
+      <h2 class="product-title">Роспись по ткани · ваш дизайн</h2>
+      <div class="price">от 1 800 ₽ <span class="price-note">· финальная цена после обсуждения</span></div>
+      <p class="description">
+        Акриловая роспись профессиональными красками. Вы рассказываете идею, 
+        показываете примеры — я воплощаю. Градиенты, надписи, портреты, 
+        абстракция. Рисунок не боится стирки.
+      </p>
+      <div class="details">
+        <span class="detail-item"><span class="icon">🎨</span> акрил / текстильные краски</span>
+        <span class="detail-item"><span class="icon">👖</span> куртки, футболки, толстовки</span>
+        <span class="detail-item"><span class="icon">⏱️</span> срок 4–8 дней</span>
+      </div>
+      <a href="https://t.me/alifanTO" target="_blank" rel="noopener noreferrer" class="contact-seller">
+        ✉️ Написать и обсудить кастом
+      </a>
+      <div class="seller-meta">
+        <span class="rating">★★★★☆ 4.9 (32 отзыва)</span>
+        <span><span class="icon">🖌️</span> ваша идея — моё исполнение</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3️⃣ КОМБО: ВЫШИВКА + КАСТОМИЗАЦИЯ (слайдер из 3 фото) -->
+  <div class="product-card">
+    <div class="product-images">
+      <div class="slider-container" id="slider3">
+        <div class="slides">
+          <div class="slide active">
+            <img src="https://images.pexels.com/photos/5876501/pexels-photo-5876501.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Комбо вышивка и роспись 1">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/11832623/pexels-photo-11832623.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Комбо вышивка и роспись 2">
+          </div>
+          <div class="slide">
+            <img src="https://images.pexels.com/photos/5876510/pexels-photo-5876510.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Комбо на худи">
+          </div>
+        </div>
+        <button class="slider-btn prev" onclick="changeSlide('slider3', -1)">❮</button>
+        <button class="slider-btn next" onclick="changeSlide('slider3', 1)">❯</button>
+        <div class="slider-dots" id="dots3">
+          <span class="dot active" onclick="goToSlide('slider3', 0)"></span>
+          <span class="dot" onclick="goToSlide('slider3', 1)"></span>
+          <span class="dot" onclick="goToSlide('slider3', 2)"></span>
+        </div>
+        <div class="photo-counter" id="counter3">1 / 3</div>
+      </div>
+    </div>
+    <div class="product-info">
+      <div class="brand">КАТЕГОРИЯ · КОМБО</div>
+      <h2 class="product-title">Вышивка + роспись в одном изделии</h2>
+      <div class="price">от 3 500 ₽ <span class="price-note">· обсуждается индивидуально</span></div>
+      <p class="description">
+        Объёмный и тактильный дизайн: сочетаю машинную/ручную вышивку с росписью. 
+        Вы можете предложить любую концепцию — от минимализма до сложных композиций. 
+        Особенно круто смотрится на толстовках и бомберах.
+      </p>
+      <div class="details">
+        <span class="detail-item"><span class="icon">🧵🎨</span> вышивка + акрил</span>
+        <span class="detail-item"><span class="icon">💬</span> дизайн под ваш запрос</span>
+        <span class="detail-item"><span class="icon">⏱️</span> срок 5–10 дней</span>
+      </div>
+      <a href="https://t.me/alifanTO" target="_blank" rel="noopener noreferrer" class="contact-seller">
+        ✉️ Написать и обсудить комбо
+      </a>
+      <div class="seller-meta">
+        <span class="rating">★★★★★ 5.0 (19 отзывов)</span>
+        <span><span class="icon">✨</span> ваш дизайн — моя реализация</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-footer">
+  <p>💬 <strong>Осталось только написать</strong> — расскажите, какую одежду хотите преобразить,<br> 
+     и выберите одну из трёх категорий: вышивка, кастомизация или комбо.</p>
+  <a href="https://t.me/alifanTO" target="_blank" rel="noopener noreferrer" class="big-button">
+    ✉️ Написать в Telegram прямо сейчас
+  </a>
+  <p style="margin-top: 1.2rem; font-size: 0.95rem; opacity: 0.8;">
+    Вы присылаете фото/описание → я предлагаю варианты и стоимость → утверждаем и создаём ✦
+  </p>
+</div>
+
+<footer>
+  ✦ САМОДЕЛЬНЫЕ ВЕЩИ У-И ✦  каждая вещь становится уникальной ✦
+</footer>
+
+<script>
+  // Объект для хранения текущего индекса каждого слайдера
+  const sliders = {
+    'slider1': 0,
+    'slider2': 0,
+    'slider3': 0
+  };
+
+  // Функция для переключения слайда
+  function changeSlide(sliderId, direction) {
+    const container = document.getElementById(sliderId);
+    const slides = container.querySelectorAll('.slide');
+    const dots = container.querySelectorAll('.dot');
+    const counter = container.querySelector('.photo-counter');
+    
+    let currentIndex = sliders[sliderId];
+    
+    // Скрываем текущий слайд
+    slides[currentIndex].classList.remove('active');
+    dots[currentIndex].classList.remove('active');
+    
+    // Вычисляем новый индекс
+    currentIndex = (currentIndex + direction + slides.length) % slides.length;
+    sliders[sliderId] = currentIndex;
+    
+    // Показываем новый слайд
+    slides[currentIndex].classList.add('active');
+    dots[currentIndex].classList.add('active');
+    
+    // Обновляем счётчик
+    counter.textContent = (currentIndex + 1) + ' / ' + slides.length;
+  }
+
+  // Функция для перехода к конкретному слайду
+  function goToSlide(sliderId, index) {
+    const container = document.getElementById(sliderId);
+    const slides = container.querySelectorAll('.slide');
+    const dots = container.querySelectorAll('.dot');
+    const counter = container.querySelector('.photo-counter');
+    
+    let currentIndex = sliders[sliderId];
+    
+    // Скрываем текущий слайд
+    slides[currentIndex].classList.remove('active');
+    dots[currentIndex].classList.remove('active');
+    
+    // Устанавливаем новый индекс
+    currentIndex = index;
+    sliders[sliderId] = currentIndex;
+    
+    // Показываем новый слайд
+    slides[currentIndex].classList.add('active');
+    dots[currentIndex].classList.add('active');
+    
+    // Обновляем счётчик
+    counter.textContent = (currentIndex + 1) + ' / ' + slides.length;
+  }
+
+  // Инициализация при загрузке
+  document.addEventListener('DOMContentLoaded', function() {
+    // Убеждаемся, что все счётчики показывают правильные значения
+    for (let i = 1; i <= 3; i++) {
+      const sliderId = 'slider' + i;
+      const container = document.getElementById(sliderId);
+      if (container) {
+        const slides = container.querySelectorAll('.slide');
+        const counter = container.querySelector('.photo-counter');
+        if (counter) {
+          counter.textContent = '1 / ' + slides.length;
+        }
+      }
+    }
+  });
+</script>
+
+</body>
+</html>
